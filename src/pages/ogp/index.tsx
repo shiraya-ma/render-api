@@ -3,7 +3,7 @@ import React from 'react';
 import { type DocumentContext } from 'next/document';
 
 import { getOGPData } from '@/features/ogp';
-import { OGPCard } from './_ogp-card';
+import { OGPCard } from '@/components/ogp-card';
 
 const Page: React.FC<Page.Props> = (props) => {
     const { ogp } = props;

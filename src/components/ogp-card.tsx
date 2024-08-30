@@ -3,7 +3,7 @@
 import React, { MouseEvent } from 'react';
 import { Link, useDisclosure } from '@nextui-org/react';
 
-import { Modla } from './_modal';
+import { Modla } from './modal';
 
 const OGPCard: React.FC<OGPCard.Props> = (props) => {
     const { ogp } = props;

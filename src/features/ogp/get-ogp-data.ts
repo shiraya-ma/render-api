@@ -1,5 +1,5 @@
 'use strict';
-import { type HTMLMetaElement, Window } from 'happy-dom';
+import { type HTMLHeadElement, type HTMLMetaElement, Window } from 'happy-dom';
 
 export async function getOGPData (url: string) {    
     const window = new Window({ url });
@@ -37,7 +37,7 @@ export async function getOGPData (url: string) {
     // Array.from(head.querySelectorAll('meta'))
     // metas.forEach(meta => console.debug(meta.outerHTML));
 
-    const title = getContent(metas, 'title');
+    const title = getContent(metas, 'title') ?? getTitle(head);
 
     const image = getContent(metas, 'image');
 
@@ -56,4 +56,10 @@ function getContent (metas: HTMLMetaElement[], property: string) {
     const content = target?.getAttribute('content');
 
     return content;
+};
+
+function getTitle (head: HTMLHeadElement): string | undefined {
+    const title = head.querySelector('title');
+
+    return title?.textContent ?? undefined;
 };

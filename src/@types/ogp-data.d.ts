@@ -4,6 +4,8 @@ declare global {
     export type OGPData = {
         image?: string;
         title?: string;
-        url: string;
+        url?: string;
+
+        message?: string;
     };
 }

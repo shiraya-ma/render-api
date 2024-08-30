@@ -7,11 +7,12 @@ const Document: React.FC<Document.Props> = (props) => {
     const {} = props;
     
     return (
-        <Html lang="jp">
+        <Html lang="jp" className='size-full dark:bg-gray-800 dark:text-white'>
             <Head />
 
-            <body className='dark:bg-gray-800 dark:text-white'>
+            <body>
                 <Main />
+                
                 <NextScript />
             </body>
         </Html>

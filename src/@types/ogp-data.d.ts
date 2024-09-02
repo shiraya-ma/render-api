@@ -24,7 +24,7 @@ declare global {
             description?: string;
             image?: string;
             siteNane: string
-            titl?: string;
+            title?: string;
             type: string;
             url: string;
         };

@@ -1,3 +1,3 @@
 'use strict';
 
-export * from './get-ogp-data';
+export * from './get-ogp';

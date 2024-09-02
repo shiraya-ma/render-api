@@ -1,9 +1,9 @@
 {
   "private": true,
   "scripts": {
-    "dev": "next dev --turbo",
+    "dev": "next dev --turbo --port=8080",
     "build": "next build",
-    "start": "next start",
+    "start": "next start --port=8080",
     "lint": "next lint"
   },
   "dependencies": {

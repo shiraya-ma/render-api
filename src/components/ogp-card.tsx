@@ -8,12 +8,10 @@ import { Modla } from './modal';
 const OGPCard: React.FC<OGPCard.Props> = (props) => {
     const { ogp } = props;
 
-    const {
-        image,
-        message,
-        title,
-        url
-    } = ogp;    
+    const image = ogp.data?.twitter?.image || ogp.data?.og?.image;
+    const title = ogp.data?.twitter?.title || ogp.data?.og?.title || ogp.data?.title;
+    const url = ogp.url;
+    const message = ogp.message;
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     
@@ -72,7 +70,7 @@ const OGPCard: React.FC<OGPCard.Props> = (props) => {
 
 namespace OGPCard {
     export type Props = {
-        ogp: OGPData;
+        ogp: OGP.Props;
     };
 };
 

@@ -1,5 +1,5 @@
 'use strict';
-import { getOGPData } from "@/features/ogp";
+import { getOGP } from "@/features/ogp";
 import { initHandler } from "@/libs";
 
 const handler = initHandler({
@@ -7,7 +7,8 @@ const handler = initHandler({
         const url = req.query.url;
 
         if (typeof url === 'undefined') {
-            const ogp: OGPData = {
+            const ogp: OGP.Props = {
+                url: 'no url',
                 message: `Need query url. @example /api/ogp?url=https://www.shiraya.ma`
             };
 
@@ -16,12 +17,12 @@ const handler = initHandler({
 
         else if (typeof url === 'string') {
             try {
-                const ogp = await getOGPData(url);
+                const ogp = await getOGP(url);
     
                 res.status(200).json(ogp);
             } catch (e) {
-                const ogp: OGPData = {
-                    message: `Failed fetch to ${ url }`
+                const ogp: OGP.Props = {
+                    url, message: `Failed fetch to ${ url }`
                 };
 
                 res.status(500).json(ogp);
@@ -31,11 +32,12 @@ const handler = initHandler({
         else {
             const ogps = await Promise.all(url.map(async url => {
                 try {
-                    const ogp = await getOGPData(url);
+                    const ogp = await getOGP(url);
 
                     return ogp;
                 } catch (e) {
-                    const ogp: OGPData = {
+                    const ogp: OGP.Props = {
+                        url,
                         message: `Failed fetch to ${ url }`
                     };
 

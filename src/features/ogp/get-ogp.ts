@@ -31,10 +31,6 @@ export async function getOGP (url: string): Promise<OGP.Props> {
 
         const reg = new RegExp(`^${ prefix }:`);
 
-        if (prefix === 'twitter') {
-            metas.forEach(meta => console.debug(meta.outerHTML));
-        }
-
         metas.filter(meta =>reg.test(getKey(meta)))
         .forEach(meta => {
             const key = getKey(meta)

@@ -47,17 +47,18 @@ async function getImage (url: string): Promise<{ message?: string, image?: Image
         const contentType = headers.get('content-type')!;
         log.debug('content-type:', contentType);
 
-        const IMAGE_TYPES = [
-            'image/jpeg'
-        ];
+        // const IMAGE_TYPES = [
+        //     'image/jpeg',
+        //     'image/png'
+        // ];
 
-        if (!IMAGE_TYPES.some(t => t === contentType)) {
-            log.info(`No match content-type [${ contentType }] from [${ url }]`);
+        // if (!IMAGE_TYPES.some(t => t === contentType)) {
+        //     log.info(`No match content-type [${ contentType }] from [${ url }]`);
 
-            return {
-                message: `No match content-type [${ contentType }] from [${ url }]`
-            };
-        }
+        //     return {
+        //         message: `No match content-type [${ contentType }] from [${ url }]`
+        //     };
+        // }
 
         const imageData = Buffer.from(await res.arrayBuffer());
 

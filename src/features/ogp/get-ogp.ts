@@ -1,7 +1,7 @@
 'use strict';
 import { type HTMLMetaElement, Window } from 'happy-dom';
 
-export async function getOGP (url: string): Promise<OGP.Props> {
+export async function getOGP (url: string, origin: string): Promise<OGP.Props> {
     const window = new Window({ url });
 
     const res = await fetch(url, {
@@ -21,10 +21,10 @@ export async function getOGP (url: string): Promise<OGP.Props> {
 
     const head = document.head;
     const metas = Array.from(head.querySelectorAll('meta'));
-    const title = head.querySelector('title')?.innerHTML;
+    const title = head.querySelector('title')?.innerHTML || null;
     const description = metas
     .filter(meta => meta.getAttribute('name') === 'description')
-    .pop()?.getAttribute('content');
+    .pop()?.getAttribute('content') || null;
 
     const getContents = ((metas: HTMLMetaElement[]) => <T extends OGP.Common>(prefix: string): T => {
         let data = {};
@@ -39,7 +39,7 @@ export async function getOGP (url: string): Promise<OGP.Props> {
 
             const value = meta.getAttribute('content');
 
-            (data as any)[key] = value;
+            (data as any)[key] = /image$/.test(key)? `${ origin }/api/image?url=${ value }`: value;
         });
 
         return data as T;

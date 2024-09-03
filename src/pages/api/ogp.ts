@@ -1,51 +1,35 @@
 'use strict';
 import { getOGP } from "@/features/ogp";
-import { initHandler } from "@/libs";
+import { getOrigin, initHandler, log } from "@/libs";
 
 const handler = initHandler({
     GET: async (req, res) => {
-        const url = req.query.url;
+        const origin = getOrigin(req);
+        const qURL = req.query.url;
 
-        if (typeof url === 'undefined') {
+        if (qURL === undefined) {
             const ogp: OGP.Props = {
                 url: 'no url',
                 message: `Need query url. @example /api/ogp?url=https://www.shiraya.ma`
-            };
+            };           
 
             res.status(400).json(ogp);
+
+            return;
         }
 
-        else if (typeof url === 'string') {
-            try {
-                const ogp = await getOGP(url);
-    
-                res.status(200).json(ogp);
-            } catch (e) {
-                const ogp: OGP.Props = {
-                    url, message: `Failed fetch to ${ url }`
-                };
+        const url = typeof qURL === 'string'? qURL: qURL.pop()!;
 
-                res.status(500).json(ogp);
-            }
-        }
+        try {
+            const ogp = await getOGP(url, origin);
 
-        else {
-            const ogps = await Promise.all(url.map(async url => {
-                try {
-                    const ogp = await getOGP(url);
+            res.status(200).json(ogp);
+        } catch (e) {
+            const ogp: OGP.Props = {
+                url, message: `Failed fetch to ${ url }`
+            };
 
-                    return ogp;
-                } catch (e) {
-                    const ogp: OGP.Props = {
-                        url,
-                        message: `Failed fetch to ${ url }`
-                    };
-
-                    return ogp
-                }
-            }));
-
-            res.status(200).json(ogps);
+            res.status(500).json(ogp);
         }
     }
 });

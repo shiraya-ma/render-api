@@ -61,10 +61,10 @@ const Page: React.FC<Page.Props> = (props) => {
 export const getServerSideProps = async (context: DocumentContext) => {
     const { query } = context;
 
-    const url = query.url;
+    const qURL = query.url;
 
     const ogp: OGP.Props | OGP.Props[] = await (async () => {
-        if (typeof url === 'undefined') {
+        if (qURL === undefined) {
             const ogp: OGP.Props = {
                 url: 'no url',
                 message: `Need query url. @example /api/ogp?url=https://www.shiraya.ma`
@@ -73,38 +73,19 @@ export const getServerSideProps = async (context: DocumentContext) => {
             return ogp;
         }
 
-        else if (typeof url === 'string') {
-            try {
-                const ogp = await getOGP(url);
-    
-                return ogp;
-            } catch (e) {
-                const ogp: OGP.Props = {
-                    url,
-                    message: `Failed fetch to ${ url }`
-                };
+        const url = typeof qURL === 'string'? qURL: qURL.pop()!;
 
-                return ogp;
-            }
-        }
+        try {
+            const ogp = await getOGP(url, '');
 
-        else {
-            const ogps = await Promise.all(url.map(async url => {
-                try {
-                    const ogp = await getOGP(url);
+            return ogp;
+        } catch (e) {
+            const ogp: OGP.Props = {
+                url,
+                message: `Failed fetch to ${ url }`
+            };
 
-                    return ogp;
-                } catch (e) {
-                    const ogp: OGP.Props = {
-                        url,
-                        message: `Failed fetch to ${ url }`
-                    };
-
-                    return ogp
-                }
-            }));
-
-            return ogps;
+            return ogp;
         }
     })();
 

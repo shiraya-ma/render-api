@@ -9,8 +9,8 @@ declare global {
             message?: string;
 
             data?: {
-                title?: string;
-                description?: string;
+                title: string | null;
+                description: string | null;
 
                 fb: FaceBook;
 
@@ -21,9 +21,9 @@ declare global {
         };
 
         export type Common = {
-            description?: string;
+            description: string;
             image?: string;
-            siteNane: string
+            siteName: string
             title?: string;
             type: string;
             url: string;

@@ -1,7 +1,11 @@
 'use strict';
 import { type HTMLMetaElement, Window } from 'happy-dom';
 
+import { log } from '@/libs';
+
 export async function getOGP (url: string, origin: string): Promise<OGP.Props> {
+    log.info('[GET-OGP] url:', url);
+
     const window = new Window({ url });
 
     const res = await fetch(url, {
@@ -26,6 +30,8 @@ export async function getOGP (url: string, origin: string): Promise<OGP.Props> {
     .filter(meta => meta.getAttribute('name') === 'description')
     .pop()?.getAttribute('content') || null;
 
+    // metas.forEach(meta => log.debug(meta.outerHTML));
+
     const getContents = ((metas: HTMLMetaElement[]) => <T extends OGP.Common>(prefix: string): T => {
         let data = {};
 
@@ -34,12 +40,18 @@ export async function getOGP (url: string, origin: string): Promise<OGP.Props> {
         metas.filter(meta =>reg.test(getKey(meta)))
         .forEach(meta => {
             const key = getKey(meta)
-            .replace(reg, '')
-            .replace(/\_(.)/g, (_, p1) => p1.toUpperCase());
+            .replace(reg, '');
+
+            const Key = key.replace(/\_(.)/g, (_, p1) => p1.toUpperCase());
 
             const value = meta.getAttribute('content');
 
-            (data as any)[key] = /image$/.test(key)? `${ origin }/api/image?url=${ value }`: value;
+            // if (/image$/.test(key)) {
+            //     log.warn('key  :', key);
+            //     log.warn('value:', value);
+            // }
+
+            (data as any)[Key] = /image$/.test(key)? `${ origin }/api/image?url=${ encodeURIComponent(value) }`: value;
         });
 
         return data as T;
@@ -55,6 +67,8 @@ export async function getOGP (url: string, origin: string): Promise<OGP.Props> {
             twitter: getContents<OGP.Twitter>('twitter')
         }
     };
+
+    // log.trace(`ogp:\n`, JSON.stringify(ogp, null, 2));
 
     return ogp;
 };

@@ -1,27 +1,16 @@
 'use strict';
 import React from 'react';
+import Head from 'next/head';
 import { type DocumentContext } from 'next/document';
 
 import { getOGP } from '@/features/ogp';
-import { OGPCard } from '@/components/ogp-card';
-import Head from 'next/head';
+import { OGPCard } from '@/components';
+import { log } from '@/libs';
 
 const Page: React.FC<Page.Props> = (props) => {
     const { ogp } = props;
 
-    if (typeof (ogp as Array<OGP.Props>).length !== 'undefined') {
-        const ogps = ogp as Array<OGP.Props>;
-
-        return (
-            <div className='flex flex-col gap-4'>
-                { ogps.map((ogp, index) => (<OGPCard ogp={ ogp } key={ index }/>)) }
-            </div>
-        );
-    }
-
-    const _ogp = ogp as OGP.Props;
-
-    const data = _ogp.data;
+    const data = ogp.data;
 
     const title = data?.title;
 
@@ -53,7 +42,7 @@ const Page: React.FC<Page.Props> = (props) => {
                 ))}
             </Head>
 
-            <OGPCard ogp={ ogp as OGP.Props } />
+            <OGPCard ogp={ ogp } />
         </>
     );
 };
@@ -63,7 +52,9 @@ export const getServerSideProps = async (context: DocumentContext) => {
 
     const qURL = query.url;
 
-    const ogp: OGP.Props | OGP.Props[] = await (async () => {
+    log.info(`[PAGE] /ogp?url=${ qURL }`);
+
+    const ogp: OGP.Props = await (async () => {
         if (qURL === undefined) {
             const ogp: OGP.Props = {
                 url: 'no url',
@@ -80,6 +71,11 @@ export const getServerSideProps = async (context: DocumentContext) => {
 
             return ogp;
         } catch (e) {
+            const err = e as Error;
+
+            log.error(err.message);
+            // console.error(err);
+
             const ogp: OGP.Props = {
                 url,
                 message: `Failed fetch to ${ url }`
@@ -98,7 +94,7 @@ export const getServerSideProps = async (context: DocumentContext) => {
 
 namespace Page {
     export type Props = {
-        ogp: OGP.Props | OGP.Props[];
+        ogp: OGP.Props;
     };
 };
 

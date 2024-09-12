@@ -1,5 +1,4 @@
 'use strict';
-// import { type HTMLMetaElement, Window } from 'happy-dom';
 import { parse, type HTMLElement } from 'node-html-parser';
 
 import { log } from '@/libs';

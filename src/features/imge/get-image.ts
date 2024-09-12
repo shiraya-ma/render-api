@@ -20,9 +20,6 @@ export async function getImage (url: string): Promise<Image | undefined> {
             return undefined;
         }
 
-        console.log(res);
-        console.log(res.headers.toJSON());
-
         const contentLength = res.headers.get('content-length');
 
         if (!contentLength) {
@@ -33,14 +30,13 @@ export async function getImage (url: string): Promise<Image | undefined> {
 
         const blob = await res.blob();
 
-        const contentType = blob.type ?? res.headers.get('content-type');
+        const contentType = res.headers.get('content-type') || blob.type;
 
         if (!contentType) {
             log.error('[GET-IMAGE] Not found content-type');
 
             return undefined;
         }
-
 
         if (!REG_CONTENT_TYPE.test(contentType)) {
             log.error('[GET-IMAGE] Not match content-type to image', contentType);

@@ -20,6 +20,9 @@ export async function getImage (url: string): Promise<Image | undefined> {
             return undefined;
         }
 
+        console.log(res);
+        console.log(res.headers.toJSON());
+
         const contentLength = res.headers.get('content-length');
 
         if (!contentLength) {

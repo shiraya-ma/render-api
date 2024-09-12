@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "bun index.ts",
-    "dev": "cross-env NODE_ENV=development bun --watch index.ts"
+    "dev": "cross-env NODE_ENV=development bun --watch index.ts",
+    "build": ""
   },
   "dependencies": {
     "@shiraya-ma/mai-logger": "^3.0.2",

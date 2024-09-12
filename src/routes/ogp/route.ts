@@ -29,6 +29,8 @@ const GET: Mai.Handler = async (req, res) => {
     res.json(ogp);
 
     res.end();
+
+    return;
 };
 
 export default initRoute({ GET });
